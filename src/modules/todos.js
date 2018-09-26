@@ -30,32 +30,31 @@ export default handleActions({
             나중에 이 코드를 보았을 때,
             이 액션이 어떤 데이터를 처리하는지 쉽게 볼수 있도록 하는 작업니다.
         */
-       const { id, text, done } = action.payload;
-
-       return state.push(Map({
-           id,
-           text,
-           done
-       }));
+        const { id, text, done } = action.payload;
+        return state.push(Map({
+            id,
+            text,
+            done
+        }));
     },
     [TOGGLE]: (state, action) => {
-        const { payload: index } = action;
+        const { payload: id } = action;
         // = const index = action.payload;
         /* 비구조화 할당으로 index 레퍼런스에 action.payload 값을 넣습니다.
             이 작업이 필수는 아니지만, 나중에 이 코드를 보았을 때 여기에서 payload가
             어떤 값을 의미하는지 쉽게 이해할 수 있습니다.
         */
-       // uploadIn으로 현재 값을 참조하여 반대 값으로 설정합니다.
-       return state.updateIn([index, 'done'], done => !done);
-    // return state.setIn([index, 'done'], !state.getIn([index, 'done']));
-       /* updateIn을 사용하지 않는다면 다음과 같이 작성할 수도 있습니다.
+        // uploadIn으로 현재 값을 참조하여 반대 값으로 설정합니다.
+        return state.updateIn([state.findIndex(value => value.get('id') === id), 'done'], done => !done);
+        // return state.setIn([index, 'done'], !state.getIn([index, 'done']));
+        /* updateIn을 사용하지 않는다면 다음과 같이 작성할 수도 있습니다.
             return state.setIn([index, 'done'], !state.getIn([0, index]));
             어떤 코드가 더 편해 보이나요?
             둘 중에 여러분 맘에 드는 코드로 작성하면 됩니다.
         */
     },
     [REMOVE]: (state, action) => {
-        const { payload: index } = action;
-        return state.delete(index);
+        const { payload: id } = action;
+        return state.delete(state.findIndex(value => value.get('id') === id));
     }
 }, initialState);
